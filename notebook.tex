@@ -894,6 +894,32 @@ private:
 
 \section{DP}
 
+\subsection{Sibling DP rearrangement}
+\begin{lstlisting}[language=C++,breaklines=true]
+vector<int> adj[MAXN];
+int dg[MAXN][2]; // directed graph
+void rearrange(int curr, int par)
+{
+    if (adj[curr].size() == 1) return;
+    for (int i = 0; i < adj[curr].size(); i++)
+    {
+        if (adj[curr][i] == par)
+        {
+            swap(adj[curr][i], adj[curr][0]);
+            break;
+        }
+    }
+    dg[curr][0] = adj[curr][1]; // [0] is child
+    rearrange(adj[curr][1], curr);
+    for (int i = 2; i < adj[curr].size(); i++)
+    {
+        int u = adj[curr][i], v = adj[curr][i - 1];
+        rearrange(u, curr);
+        dg[v][1] = u; // [1] is sibling
+    }
+}
+\end{lstlisting}
+
 \subsection{SOS DP Iterative}
 
 \subsection{SOS DP Recursive}
